@@ -1,0 +1,91 @@
+<div class="container">
+  <img class="background" src="assets/field.jpeg" alt="">
+  <h2>
+    {{ "Registro de fecha" | uppercase }}
+  </h2>
+  <p>Ingresa los datos del partido</p>
+
+  @if (this.teams.length === 0) {
+  <mat-error>
+    No hay equipos registrados, por favor registra al menos 2 equipos
+  </mat-error>
+  }
+
+  <form [formGroup]="matchForm" (ngSubmit)="onSubmit()">
+    <div class="match">
+      <div class="team">
+        <img src="{{ imageTeam1 || 'assets/flag.png' }}" alt="" height="70px" />
+        <mat-form-field appearance="outline">
+
+          <mat-label>Local</mat-label>
+          <mat-select formControlName="team1" (ngModelChange)="showImage($event,'team1')">
+            <mat-option *ngFor="let team of filteredTeams1" [value]="team" >
+              {{ team.teamName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <input
+          matInput
+          type="number"
+          formControlName="golesTeam1"
+          placeholder="Goles del equipo 1"
+        />
+
+        <mat-error class="bottom" *ngIf="matchForm.controls['golesTeam1'].hasError('min')">
+          No puede ser menor a 0
+        </mat-error>
+      </div>
+
+      <img src="assets/versus-png.webp" alt="" srcset="" width="150px">
+    
+
+      <div class="team">
+        <img src="{{ imageTeam2 || 'assets/flag.png' }}" alt="" height="70px" />
+        <mat-form-field appearance="outline">
+          <mat-label>Visitante</mat-label>
+          <mat-select formControlName="team2" (ngModelChange)="showImage($event,'team2')">
+            <mat-option *ngFor="let team of filteredTeams2" [value]="team">
+              {{ team.teamName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <input
+          matInput
+          type="number"
+          formControlName="golesTeam2"
+          placeholder="Goles del equipo 2"
+        />
+        <mat-error class="bottom" *ngIf="matchForm.controls['golesTeam2'].hasError('min')">
+          No puede ser menor a 0
+        </mat-error>
+      </div>
+    </div>
+
+    <div class="match-date">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha del Partido</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fechaPartido" placeholder="Selecciona la fecha">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="buttons">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!matchForm.valid"
+      >
+        Guardar Resultado
+      </button>
+      <button mat-flat-button type="button" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+
+    <!-- Add more fields and a submit button here -->
+  </form>
+</div>
